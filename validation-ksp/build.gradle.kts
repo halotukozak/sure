@@ -4,10 +4,21 @@ import org.gradle.api.tasks.testing.logging.TestLogEvent
 plugins {
     alias(libs.plugins.kotlinJvm)
     alias(libs.plugins.mavenPublish)
+    alias(libs.plugins.binaryCompatibilityValidator)
+    alias(libs.plugins.ktlint)
+    alias(libs.plugins.kover)
 }
 
 kotlin {
     jvmToolchain(25)
+    compilerOptions {
+        jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_21)
+    }
+}
+
+java {
+    targetCompatibility = JavaVersion.VERSION_21
+    sourceCompatibility = JavaVersion.VERSION_21
 }
 
 dependencies {

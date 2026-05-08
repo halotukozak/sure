@@ -4,18 +4,27 @@ import halotukozak.validation.Message
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertIs
-import kotlin.test.assertTrue
 
 class ValidatorTest {
+    data class User(
+        val name: String,
+        val age: Int,
+    )
 
-    data class User(val name: String, val age: Int)
+    private val nameValidator =
+        Validator<String> {
+            notBlank()
+            lengthIn(1..50)
+        }
 
-    private val nameValidator = Validator<String> { notBlank(); lengthIn(1..50) }
-
-    private val userValidator = Validator<User> {
-        field(::name) { notBlank(); lengthIn(1..50) }
-        field(::age) { inRange(0..150) }
-    }
+    private val userValidator =
+        Validator<User> {
+            field(::name) {
+                notBlank()
+                lengthIn(1..50)
+            }
+            field(::age) { inRange(0..150) }
+        }
 
     @Test
     fun `valid string passes`() {
@@ -45,10 +54,11 @@ class ValidatorTest {
 
     @Test
     fun `failFast stops on first error`() {
-        val v = Validator<String>(shortCircuit = true) {
-            notBlank()
-            lengthIn(10..20)
-        }
+        val v =
+            Validator<String>(shortCircuit = true) {
+                notBlank()
+                lengthIn(10..20)
+            }
         val result = v.validate("")
         assertIs<ValidationResult.Invalid>(result)
         assertEquals(1, result.errors.size)
@@ -57,10 +67,11 @@ class ValidatorTest {
 
     @Test
     fun `accumulating collects all errors`() {
-        val v = Validator<String>(shortCircuit = false) {
-            notBlank()
-            lengthIn(10..20)
-        }.accumulating()
+        val v =
+            Validator<String>(shortCircuit = false) {
+                notBlank()
+                lengthIn(10..20)
+            }.accumulating()
         val result = v.validate("ab")
         assertIs<ValidationResult.Invalid>(result)
         assertEquals(1, result.errors.size)

@@ -34,10 +34,11 @@ private class ValidationExtensionProcessor(
     override fun process(resolver: Resolver): List<KSAnnotated> {
         if (generated) return emptyList()
 
-        val classes = resolver
-            .getSymbolsWithAnnotation(ANNOTATION_FQN, false)
-            .filterIsInstance<KSClassDeclaration>()
-            .toList()
+        val classes =
+            resolver
+                .getSymbolsWithAnnotation(ANNOTATION_FQN, false)
+                .filterIsInstance<KSClassDeclaration>()
+                .toList()
         if (classes.isEmpty()) return emptyList()
 
         val refs = classes.mapNotNull { it.toValidatorRef() }
@@ -56,10 +57,11 @@ private class ValidationExtensionProcessor(
     }
 
     private fun KSClassDeclaration.toValidatorRef(): ValidatorRef? {
-        val receiverFqn = qualifiedName?.asString() ?: run {
-            logger.warn("@Validatable type ${simpleName.asString()} has no qualified name", this)
-            return null
-        }
+        val receiverFqn =
+            qualifiedName?.asString() ?: run {
+                logger.warn("@Validatable type ${simpleName.asString()} has no qualified name", this)
+                return null
+            }
         val validatorExpression = customValidatorFqn() ?: companionValidatorExpression(receiverFqn) ?: return null
         return ValidatorRef(receiverFqn, validatorExpression)
     }
@@ -80,40 +82,49 @@ private class ValidationExtensionProcessor(
     }
 
     private fun KSClassDeclaration.customValidatorFqn(): String? {
-        val annotation = annotations.firstOrNull {
-            it.annotationType.resolve().declaration.qualifiedName?.asString() == ANNOTATION_FQN
-        } ?: return null
+        val annotation =
+            annotations.firstOrNull {
+                it.annotationType
+                    .resolve()
+                    .declaration.qualifiedName
+                    ?.asString() == ANNOTATION_FQN
+            } ?: return null
 
-        val withType = annotation.arguments
-            .firstOrNull { it.name?.asString() == WITH_ARG }
-            ?.value as? KSType ?: return null
+        val withType =
+            annotation.arguments
+                .firstOrNull { it.name?.asString() == WITH_ARG }
+                ?.value as? KSType ?: return null
 
         val withFqn = withType.declaration.qualifiedName?.asString()
         return withFqn?.takeUnless { it == VALIDATOR_FQN }
     }
 
-    private fun render(refs: List<ValidatorRef>): String = buildString {
-        appendLine("package $GENERATED_PACKAGE")
-        appendLine()
-        for (ref in refs) {
-            appendLine(
-                "fun ${ref.receiverFqn}.validate(): $VALIDATION_RESULT_FQN = " +
-                    "${ref.validatorExpression}.validate(this)",
-            )
+    private fun render(refs: List<ValidatorRef>): String =
+        buildString {
+            appendLine("package $GENERATED_PACKAGE")
             appendLine()
+            for (ref in refs) {
+                appendLine(
+                    "fun ${ref.receiverFqn}.validate(): $VALIDATION_RESULT_FQN = " +
+                        "${ref.validatorExpression}.validate(this)",
+                )
+                appendLine()
+            }
+            appendLine("@PublishedApi")
+            appendLine("internal val validatorsByClass: Map<kotlin.reflect.KClass<*>, $VALIDATOR_FQN<*>> = mapOf(")
+            for (ref in refs) {
+                appendLine("    ${ref.receiverFqn}::class to ${ref.validatorExpression},")
+            }
+            appendLine(")")
+            appendLine()
+            appendLine("@Suppress(\"UNCHECKED_CAST\")")
+            appendLine("inline fun <reified T : Any> validatorFor(): $VALIDATOR_FQN<T> =")
+            appendLine("    validatorsByClass[T::class] as? $VALIDATOR_FQN<T>")
+            appendLine($$"        ?: error(\"No validator registered for ${T::class.qualifiedName}\")")
         }
-        appendLine("@PublishedApi")
-        appendLine("internal val validatorsByClass: Map<kotlin.reflect.KClass<*>, $VALIDATOR_FQN<*>> = mapOf(")
-        for (ref in refs) {
-            appendLine("    ${ref.receiverFqn}::class to ${ref.validatorExpression},")
-        }
-        appendLine(")")
-        appendLine()
-        appendLine("@Suppress(\"UNCHECKED_CAST\")")
-        appendLine("inline fun <reified T : Any> validatorFor(): $VALIDATOR_FQN<T> =")
-        appendLine("    validatorsByClass[T::class] as? $VALIDATOR_FQN<T>")
-        appendLine($$"        ?: error(\"No validator registered for ${T::class.qualifiedName}\")")
-    }
 }
 
-private data class ValidatorRef(val receiverFqn: String, val validatorExpression: String)
+private data class ValidatorRef(
+    val receiverFqn: String,
+    val validatorExpression: String,
+)

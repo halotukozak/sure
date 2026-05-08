@@ -4,12 +4,19 @@ plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.kotlinPluginSerialization)
     alias(libs.plugins.mavenPublish)
+    alias(libs.plugins.binaryCompatibilityValidator)
+    alias(libs.plugins.ktlint)
+    alias(libs.plugins.kover)
 }
 
 kotlin {
     jvmToolchain(25)
 
-    jvm()
+    jvm {
+        compilerOptions {
+            jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_21)
+        }
+    }
     iosX64()
     iosArm64()
     iosSimulatorArm64()
@@ -36,6 +43,12 @@ kotlin {
         commonTest.dependencies {
             implementation(kotlin("test"))
         }
+    }
+}
+
+ktlint {
+    filter {
+        exclude { it.file.path.contains("/commonMain/") }
     }
 }
 

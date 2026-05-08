@@ -1,0 +1,390 @@
+public final class halotukozak/validation/ChecksKt {
+	public static final fun anyOf (Lhalotukozak/validation/ValidationScope;[Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function0;)V
+	public static final fun check (Lhalotukozak/validation/ValidationScope;Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function1;)V
+	public static final fun eachEntry (Lhalotukozak/validation/ValidationScope;ZLkotlin/jvm/functions/Function3;)V
+	public static synthetic fun eachEntry$default (Lhalotukozak/validation/ValidationScope;ZLkotlin/jvm/functions/Function3;ILjava/lang/Object;)V
+	public static final fun eachItem (Lhalotukozak/validation/ValidationScope;ZLkotlin/jvm/functions/Function2;)V
+	public static synthetic fun eachItem$default (Lhalotukozak/validation/ValidationScope;ZLkotlin/jvm/functions/Function2;ILjava/lang/Object;)V
+	public static final fun eachKey (Lhalotukozak/validation/ValidationScope;ZLkotlin/jvm/functions/Function2;)V
+	public static synthetic fun eachKey$default (Lhalotukozak/validation/ValidationScope;ZLkotlin/jvm/functions/Function2;ILjava/lang/Object;)V
+	public static final fun eachValue (Lhalotukozak/validation/ValidationScope;ZLkotlin/jvm/functions/Function2;)V
+	public static synthetic fun eachValue$default (Lhalotukozak/validation/ValidationScope;ZLkotlin/jvm/functions/Function2;ILjava/lang/Object;)V
+	public static final fun field (Lhalotukozak/validation/ValidationScope;Lkotlin/reflect/KProperty0;ZLkotlin/jvm/functions/Function2;)V
+	public static synthetic fun field$default (Lhalotukozak/validation/ValidationScope;Lkotlin/reflect/KProperty0;ZLkotlin/jvm/functions/Function2;ILjava/lang/Object;)V
+	public static final fun hasPrefix (Lhalotukozak/validation/ValidationScope;Ljava/lang/String;)V
+	public static final fun hasSuffix (Lhalotukozak/validation/ValidationScope;Ljava/lang/String;)V
+	public static final fun inRange (Lhalotukozak/validation/ValidationScope;Lkotlin/ranges/ClosedRange;)V
+	public static final fun includes (Lhalotukozak/validation/ValidationScope;Ljava/lang/String;)V
+	public static final fun includesAll (Lhalotukozak/validation/ValidationScope;Ljava/util/Collection;)V
+	public static final fun isFalse (Lhalotukozak/validation/ValidationScope;)V
+	public static final fun isTrue (Lhalotukozak/validation/ValidationScope;)V
+	public static final fun lengthIn (Lhalotukozak/validation/ValidationScope;Lkotlin/ranges/IntRange;)V
+	public static final fun matches (Lhalotukozak/validation/ValidationScope;Lkotlin/text/Regex;Lhalotukozak/validation/Message;)V
+	public static final fun max (Lhalotukozak/validation/ValidationScope;Ljava/lang/Comparable;)V
+	public static final fun maxLength (Lhalotukozak/validation/ValidationScope;I)V
+	public static final fun maxSize (Lhalotukozak/validation/ValidationScope;I)V
+	public static final fun min (Lhalotukozak/validation/ValidationScope;Ljava/lang/Comparable;)V
+	public static final fun minLength (Lhalotukozak/validation/ValidationScope;I)V
+	public static final fun minSize (Lhalotukozak/validation/ValidationScope;I)V
+	public static final fun negativeDouble (Lhalotukozak/validation/ValidationScope;)V
+	public static final fun negativeInt (Lhalotukozak/validation/ValidationScope;)V
+	public static final fun negativeLong (Lhalotukozak/validation/ValidationScope;)V
+	public static final fun noConsecutiveSpaces (Lhalotukozak/validation/ValidationScope;)V
+	public static final fun noLeadingOrTrailingSpace (Lhalotukozak/validation/ValidationScope;)V
+	public static final fun nonNegativeDouble (Lhalotukozak/validation/ValidationScope;)V
+	public static final fun nonNegativeInt (Lhalotukozak/validation/ValidationScope;)V
+	public static final fun nonNegativeLong (Lhalotukozak/validation/ValidationScope;)V
+	public static final fun nonPositiveDouble (Lhalotukozak/validation/ValidationScope;)V
+	public static final fun nonPositiveInt (Lhalotukozak/validation/ValidationScope;)V
+	public static final fun nonPositiveLong (Lhalotukozak/validation/ValidationScope;)V
+	public static final fun noneOf (Lhalotukozak/validation/ValidationScope;Ljava/util/Collection;)V
+	public static final fun not (Lhalotukozak/validation/ValidationScope;Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function0;)V
+	public static final fun notBlank (Lhalotukozak/validation/ValidationScope;)V
+	public static final fun notEmpty (Lhalotukozak/validation/ValidationScope;)V
+	public static final fun notEmptyMap (Lhalotukozak/validation/ValidationScope;)V
+	public static final fun notEmptyString (Lhalotukozak/validation/ValidationScope;)V
+	public static final fun oneOf (Lhalotukozak/validation/ValidationScope;Ljava/util/Collection;)V
+	public static final fun optional (Lhalotukozak/validation/ValidationScope;Lkotlin/reflect/KProperty0;ZLkotlin/jvm/functions/Function2;)V
+	public static synthetic fun optional$default (Lhalotukozak/validation/ValidationScope;Lkotlin/reflect/KProperty0;ZLkotlin/jvm/functions/Function2;ILjava/lang/Object;)V
+	public static final fun positiveDouble (Lhalotukozak/validation/ValidationScope;)V
+	public static final fun positiveInt (Lhalotukozak/validation/ValidationScope;)V
+	public static final fun positiveLong (Lhalotukozak/validation/ValidationScope;)V
+	public static final fun requireThat (Lhalotukozak/validation/ValidationScope;ZLkotlin/jvm/functions/Function0;)V
+	public static final fun sizeIn (Lhalotukozak/validation/ValidationScope;Lkotlin/ranges/IntRange;)V
+	public static final fun unique (Lhalotukozak/validation/ValidationScope;)V
+	public static final fun validated (Lhalotukozak/validation/ValidationScope;Lkotlin/reflect/KProperty0;Lhalotukozak/validation/Validator;)V
+}
+
+public final class halotukozak/validation/EntryScope : halotukozak/validation/ValidationScope {
+	public fun <init> (Ljava/lang/Object;Ljava/lang/Object;Lhalotukozak/validation/ValidationScope;Z)V
+	public synthetic fun <init> (Ljava/lang/Object;Ljava/lang/Object;Lhalotukozak/validation/ValidationScope;ZILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun getValue ()Ljava/lang/Object;
+	public fun raise (Lhalotukozak/validation/Message;)V
+}
+
+public final class halotukozak/validation/EphemeralScope : halotukozak/validation/ValidationScope {
+	public fun <init> (Ljava/lang/Object;Lhalotukozak/validation/ValidationScope;Z)V
+	public synthetic fun <init> (Ljava/lang/Object;Lhalotukozak/validation/ValidationScope;ZILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun getErrors ()Ljava/util/List;
+	public final fun getValue ()Ljava/lang/Object;
+	public fun raise (Lhalotukozak/validation/Message;)V
+}
+
+public final class halotukozak/validation/FieldScope : halotukozak/validation/ValidationScope {
+	public fun <init> (Ljava/lang/Object;Ljava/lang/String;Lhalotukozak/validation/ValidationScope;Z)V
+	public synthetic fun <init> (Ljava/lang/Object;Ljava/lang/String;Lhalotukozak/validation/ValidationScope;ZILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun getValue ()Ljava/lang/Object;
+	public fun raise (Lhalotukozak/validation/Message;)V
+}
+
+public final class halotukozak/validation/ItemScope : halotukozak/validation/ValidationScope {
+	public fun <init> (Ljava/lang/Object;ILhalotukozak/validation/ValidationScope;Z)V
+	public synthetic fun <init> (Ljava/lang/Object;ILhalotukozak/validation/ValidationScope;ZILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun getValue ()Ljava/lang/Object;
+	public fun raise (Lhalotukozak/validation/Message;)V
+}
+
+public class halotukozak/validation/Message {
+	public static final field Companion Lhalotukozak/validation/Message$Companion;
+	public fun <init> (Ljava/lang/String;)V
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getText ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class halotukozak/validation/Message$AtLeast : halotukozak/validation/Message {
+	public fun <init> (Ljava/lang/Object;)V
+}
+
+public final class halotukozak/validation/Message$AtLeastCharacters : halotukozak/validation/Message {
+	public fun <init> (I)V
+}
+
+public final class halotukozak/validation/Message$AtLeastItems : halotukozak/validation/Message {
+	public fun <init> (I)V
+}
+
+public final class halotukozak/validation/Message$AtMost : halotukozak/validation/Message {
+	public fun <init> (Ljava/lang/Object;)V
+}
+
+public final class halotukozak/validation/Message$AtMostCharacters : halotukozak/validation/Message {
+	public fun <init> (I)V
+}
+
+public final class halotukozak/validation/Message$AtMostItems : halotukozak/validation/Message {
+	public fun <init> (I)V
+}
+
+public final class halotukozak/validation/Message$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class halotukozak/validation/Message$ConsecutiveSpaces : halotukozak/validation/Message {
+	public static final field INSTANCE Lhalotukozak/validation/Message$ConsecutiveSpaces;
+}
+
+public final class halotukozak/validation/Message$Contains : halotukozak/validation/Message {
+	public fun <init> (Ljava/lang/String;)V
+}
+
+public final class halotukozak/validation/Message$ContainsAll : halotukozak/validation/Message {
+	public fun <init> (Ljava/util/Collection;)V
+}
+
+public final class halotukozak/validation/Message$EndsWith : halotukozak/validation/Message {
+	public fun <init> (Ljava/lang/String;)V
+}
+
+public final class halotukozak/validation/Message$InRange : halotukozak/validation/Message {
+	public fun <init> (Lkotlin/ranges/ClosedRange;)V
+	public fun <init> (Lkotlin/ranges/IntRange;)V
+}
+
+public final class halotukozak/validation/Message$IsFalse : halotukozak/validation/Message {
+	public static final field INSTANCE Lhalotukozak/validation/Message$IsFalse;
+}
+
+public final class halotukozak/validation/Message$IsTrue : halotukozak/validation/Message {
+	public static final field INSTANCE Lhalotukozak/validation/Message$IsTrue;
+}
+
+public final class halotukozak/validation/Message$LeadingOrTrailingSpace : halotukozak/validation/Message {
+	public static final field INSTANCE Lhalotukozak/validation/Message$LeadingOrTrailingSpace;
+}
+
+public final class halotukozak/validation/Message$LengthIn : halotukozak/validation/Message {
+	public fun <init> (Lkotlin/ranges/IntRange;)V
+}
+
+public final class halotukozak/validation/Message$Matches : halotukozak/validation/Message {
+	public fun <init> (Ljava/lang/String;)V
+}
+
+public final class halotukozak/validation/Message$Negative : halotukozak/validation/Message {
+	public static final field INSTANCE Lhalotukozak/validation/Message$Negative;
+}
+
+public final class halotukozak/validation/Message$NonNegative : halotukozak/validation/Message {
+	public static final field INSTANCE Lhalotukozak/validation/Message$NonNegative;
+}
+
+public final class halotukozak/validation/Message$NonPositive : halotukozak/validation/Message {
+	public static final field INSTANCE Lhalotukozak/validation/Message$NonPositive;
+}
+
+public final class halotukozak/validation/Message$NoneOf : halotukozak/validation/Message {
+	public fun <init> (Ljava/util/Collection;)V
+}
+
+public final class halotukozak/validation/Message$NotBlank : halotukozak/validation/Message {
+	public static final field INSTANCE Lhalotukozak/validation/Message$NotBlank;
+}
+
+public final class halotukozak/validation/Message$NotEmpty : halotukozak/validation/Message {
+	public static final field INSTANCE Lhalotukozak/validation/Message$NotEmpty;
+}
+
+public final class halotukozak/validation/Message$NotNull : halotukozak/validation/Message {
+	public static final field INSTANCE Lhalotukozak/validation/Message$NotNull;
+}
+
+public final class halotukozak/validation/Message$OneOf : halotukozak/validation/Message {
+	public fun <init> (Ljava/util/Collection;)V
+}
+
+public final class halotukozak/validation/Message$Positive : halotukozak/validation/Message {
+	public static final field INSTANCE Lhalotukozak/validation/Message$Positive;
+}
+
+public final class halotukozak/validation/Message$Serializer : kotlinx/serialization/KSerializer {
+	public static final field INSTANCE Lhalotukozak/validation/Message$Serializer;
+	public fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lhalotukozak/validation/Message;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public fun serialize (Lkotlinx/serialization/encoding/Encoder;Lhalotukozak/validation/Message;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+}
+
+public final class halotukozak/validation/Message$StartsWith : halotukozak/validation/Message {
+	public fun <init> (Ljava/lang/String;)V
+}
+
+public final class halotukozak/validation/Message$TypeMismatched : halotukozak/validation/Message {
+	public fun <init> (Lkotlin/reflect/KClass;Lkotlin/reflect/KClass;)V
+}
+
+public final class halotukozak/validation/Message$Unique : halotukozak/validation/Message {
+	public static final field INSTANCE Lhalotukozak/validation/Message$Unique;
+}
+
+public final class halotukozak/validation/Message$Unsafe : halotukozak/validation/Message {
+	public fun <init> (Ljava/lang/String;)V
+}
+
+public final class halotukozak/validation/RootScope : halotukozak/validation/ValidationScope {
+	public fun <init> (Ljava/lang/Object;Z)V
+	public final fun getErrors ()Ljava/util/List;
+	public final fun getValue ()Ljava/lang/Object;
+	public fun raise (Lhalotukozak/validation/Message;)V
+}
+
+public final class halotukozak/validation/ScopeKt {
+	public static final fun getValue (Lhalotukozak/validation/ValidationScope;)Ljava/lang/Object;
+}
+
+public final class halotukozak/validation/ScopeShortCircuit : java/util/concurrent/CancellationException {
+	public fun <init> ()V
+	public fun fillInStackTrace ()Ljava/lang/Throwable;
+}
+
+public final class halotukozak/validation/ScopeShortCircuitKt {
+	public static final fun runScope (Lkotlin/jvm/functions/Function0;)V
+}
+
+public abstract interface annotation class halotukozak/validation/Validatable : java/lang/annotation/Annotation {
+	public abstract fun with ()Ljava/lang/Class;
+}
+
+public abstract interface annotation class halotukozak/validation/ValidationDsl : java/lang/annotation/Annotation {
+}
+
+public abstract interface class halotukozak/validation/ValidationError {
+	public static final field Companion Lhalotukozak/validation/ValidationError$Companion;
+	public abstract fun getMessage ()Lhalotukozak/validation/Message;
+}
+
+public final class halotukozak/validation/ValidationError$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class halotukozak/validation/ValidationError$Element : halotukozak/validation/ValidationError {
+	public static final field Companion Lhalotukozak/validation/ValidationError$Element$Companion;
+	public fun <init> (Ljava/lang/String;ILhalotukozak/validation/Message;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()I
+	public final fun component3 ()Lhalotukozak/validation/Message;
+	public final fun copy (Ljava/lang/String;ILhalotukozak/validation/Message;)Lhalotukozak/validation/ValidationError$Element;
+	public static synthetic fun copy$default (Lhalotukozak/validation/ValidationError$Element;Ljava/lang/String;ILhalotukozak/validation/Message;ILjava/lang/Object;)Lhalotukozak/validation/ValidationError$Element;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getIndex ()I
+	public fun getMessage ()Lhalotukozak/validation/Message;
+	public final fun getPath ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final synthetic class halotukozak/validation/ValidationError$Element$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Lhalotukozak/validation/ValidationError$Element$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lhalotukozak/validation/ValidationError$Element;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lhalotukozak/validation/ValidationError$Element;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class halotukozak/validation/ValidationError$Element$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class halotukozak/validation/ValidationError$Field : halotukozak/validation/ValidationError {
+	public static final field Companion Lhalotukozak/validation/ValidationError$Field$Companion;
+	public fun <init> (Ljava/lang/String;Lhalotukozak/validation/Message;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Lhalotukozak/validation/Message;
+	public final fun copy (Ljava/lang/String;Lhalotukozak/validation/Message;)Lhalotukozak/validation/ValidationError$Field;
+	public static synthetic fun copy$default (Lhalotukozak/validation/ValidationError$Field;Ljava/lang/String;Lhalotukozak/validation/Message;ILjava/lang/Object;)Lhalotukozak/validation/ValidationError$Field;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun getMessage ()Lhalotukozak/validation/Message;
+	public final fun getPath ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final synthetic class halotukozak/validation/ValidationError$Field$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Lhalotukozak/validation/ValidationError$Field$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lhalotukozak/validation/ValidationError$Field;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lhalotukozak/validation/ValidationError$Field;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class halotukozak/validation/ValidationError$Field$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class halotukozak/validation/ValidationError$Root : halotukozak/validation/ValidationError {
+	public static final field Companion Lhalotukozak/validation/ValidationError$Root$Companion;
+	public fun <init> (Lhalotukozak/validation/Message;)V
+	public final fun component1 ()Lhalotukozak/validation/Message;
+	public final fun copy (Lhalotukozak/validation/Message;)Lhalotukozak/validation/ValidationError$Root;
+	public static synthetic fun copy$default (Lhalotukozak/validation/ValidationError$Root;Lhalotukozak/validation/Message;ILjava/lang/Object;)Lhalotukozak/validation/ValidationError$Root;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun getMessage ()Lhalotukozak/validation/Message;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final synthetic class halotukozak/validation/ValidationError$Root$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Lhalotukozak/validation/ValidationError$Root$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lhalotukozak/validation/ValidationError$Root;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lhalotukozak/validation/ValidationError$Root;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class halotukozak/validation/ValidationError$Root$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public abstract interface class halotukozak/validation/ValidationResult {
+}
+
+public final class halotukozak/validation/ValidationResult$Invalid : halotukozak/validation/ValidationResult {
+	public fun <init> (Lhalotukozak/validation/ValidationError;[Lhalotukozak/validation/ValidationError;)V
+	public fun <init> (Ljava/util/List;)V
+	public final fun component1 ()Ljava/util/List;
+	public final fun copy (Ljava/util/List;)Lhalotukozak/validation/ValidationResult$Invalid;
+	public static synthetic fun copy$default (Lhalotukozak/validation/ValidationResult$Invalid;Ljava/util/List;ILjava/lang/Object;)Lhalotukozak/validation/ValidationResult$Invalid;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getErrors ()Ljava/util/List;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class halotukozak/validation/ValidationResult$Valid : halotukozak/validation/ValidationResult {
+	public static final field INSTANCE Lhalotukozak/validation/ValidationResult$Valid;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public abstract class halotukozak/validation/ValidationScope {
+	public synthetic fun <init> (Ljava/lang/String;ZLkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun getShortCircuit ()Z
+	public abstract fun raise (Lhalotukozak/validation/Message;)V
+}
+
+public class halotukozak/validation/Validator {
+	public static final field Companion Lhalotukozak/validation/Validator$Companion;
+	public fun <init> (Lkotlin/reflect/KClass;ZLkotlin/jvm/functions/Function1;)V
+	public final fun accumulating ()Lhalotukozak/validation/Validator;
+	public final fun failFast ()Lhalotukozak/validation/Validator;
+	protected final fun getKClass ()Lkotlin/reflect/KClass;
+	public final fun nullable ()Lhalotukozak/validation/Validator;
+	public fun validate (Ljava/lang/Object;)Lhalotukozak/validation/ValidationResult;
+}
+
+public final class halotukozak/validation/Validator$Companion {
+	public final fun empty ()Lhalotukozak/validation/Validator;
+}
+
