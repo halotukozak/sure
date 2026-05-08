@@ -1,6 +1,12 @@
+import org.gradle.api.tasks.testing.logging.TestLogEvent
+
 plugins {
-    id("buildsrc.convention.kotlin-jvm")
+    alias(libs.plugins.kotlinJvm)
     `maven-publish`
+}
+
+kotlin {
+    jvmToolchain(25)
 }
 
 dependencies {
@@ -10,6 +16,13 @@ dependencies {
 
 java {
     withSourcesJar()
+}
+
+tasks.withType<Test>().configureEach {
+    useJUnitPlatform()
+    testLogging {
+        events(TestLogEvent.FAILED, TestLogEvent.PASSED, TestLogEvent.SKIPPED)
+    }
 }
 
 publishing {

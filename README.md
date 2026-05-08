@@ -6,7 +6,6 @@ Type-safe value validation DSL for Kotlin Multiplatform.
 
 - `:validation` — KMP library (jvm, iosX64, iosArm64, iosSimulatorArm64). Core API: `Validator<T>`, `ValidationScope`, `@Validatable`, built-in checks.
 - `:validation-ksp` — KSP processor. Generates `T.validate()` extensions and `validatorFor<T>()` registry for every `@Validatable` class.
-- `:app` — sample consumer.
 
 ## Usage
 
@@ -49,5 +48,4 @@ Requires JDK 25.
 
 - `./gradlew build` — compile + test
 - `./gradlew :validation:jvmTest` — run jvm tests
-- `./gradlew :app:run` — run sample
 - `./gradlew publishToMavenLocal` — publish to `~/.m2/repository`
