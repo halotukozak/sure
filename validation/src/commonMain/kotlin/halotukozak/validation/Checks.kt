@@ -2,7 +2,7 @@
 
 package halotukozak.validation
 
-import halotukozak.validation.ValidationError.Message
+import halotukozak.validation.Message
 import kotlin.jvm.JvmName
 import kotlin.reflect.KProperty0
 

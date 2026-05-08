@@ -12,7 +12,7 @@ sealed class ValidationScope<out T>(
     @PublishedApi
     internal val shortCircuit: Boolean,
 ) {
-    abstract fun raise(message: ValidationError.Message)
+    abstract fun raise(message: Message)
 
     internal abstract fun report(error: ValidationError)
 }
@@ -26,7 +26,7 @@ internal class RootScope<out T>(val value: T, shortCircuit: Boolean) : Validatio
         _errors += error
     }
 
-    override fun raise(message: ValidationError.Message) {
+    override fun raise(message: Message) {
         report(ValidationError.Root(message))
         if (shortCircuit) throw ScopeShortCircuit()
     }
@@ -41,7 +41,7 @@ internal class FieldScope<out T>(
 ) : ValidationScope<T>(if (parent.path.isEmpty()) name else "${parent.path}.$name", shortCircuit) {
     override fun report(error: ValidationError) = parent.report(error)
 
-    override fun raise(message: ValidationError.Message) {
+    override fun raise(message: Message) {
         report(ValidationError.Field(path, message))
         if (shortCircuit) throw ScopeShortCircuit()
     }
@@ -56,7 +56,7 @@ internal class ItemScope<out T>(
 ) : ValidationScope<T>("${parent.path}[$index]", shortCircuit) {
     override fun report(error: ValidationError) = parent.report(error)
 
-    override fun raise(message: ValidationError.Message) {
+    override fun raise(message: Message) {
         report(ValidationError.Element(parent.path, index, message))
         if (shortCircuit) throw ScopeShortCircuit()
     }
@@ -71,7 +71,7 @@ internal class EntryScope<out T>(
 ) : ValidationScope<T>("${parent.path}[$key]", shortCircuit) {
     override fun report(error: ValidationError) = parent.report(error)
 
-    override fun raise(message: ValidationError.Message) {
+    override fun raise(message: Message) {
         report(ValidationError.Field(path, message))
         if (shortCircuit) throw ScopeShortCircuit()
     }
@@ -90,7 +90,7 @@ internal class EphemeralScope<out T>(
         _errors += error
     }
 
-    override fun raise(message: ValidationError.Message) {
+    override fun raise(message: Message) {
         _errors += ValidationError.Root(message)
         if (shortCircuit) throw ScopeShortCircuit()
     }

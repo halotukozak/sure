@@ -1,6 +1,6 @@
 package halotukozak.validation
 
-import halotukozak.validation.ValidationError.Message
+import halotukozak.validation.Message
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertIs

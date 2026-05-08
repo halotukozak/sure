@@ -19,12 +19,12 @@ open class Validator<T>(
 ) {
     open fun validate(value: Any?): ValidationResult = when {
         value == null -> {
-            ValidationResult.Invalid(ValidationError.Root(ValidationError.Message.NotNull))
+            ValidationResult.Invalid(ValidationError.Root(Message.NotNull))
         }
 
         !value.isInstanceOf(kClass) -> {
             ValidationResult.Invalid(
-                ValidationError.Root(ValidationError.Message.TypeMismatched(kClass, value::class)),
+                ValidationError.Root(Message.TypeMismatched(kClass, value::class)),
             )
         }
 

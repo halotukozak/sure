@@ -1,6 +1,6 @@
 package halotukozak.validation
 
-import halotukozak.validation.ValidationError.Message
+import halotukozak.validation.Message
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertIs
@@ -243,7 +243,7 @@ class ChecksTest {
         assertEquals(ValidationResult.Valid, v.validate(Signup("abc", "abc")))
         val r = v.validate(Signup("abc", "xyz"))
         assertIs<ValidationResult.Invalid>(r)
-        assertEquals("passwords must match", r.errors.single().message.message)
+        assertEquals("passwords must match", r.errors.single().message.text)
     }
 
     @Test
@@ -259,7 +259,7 @@ class ChecksTest {
         assertEquals(ValidationResult.Valid, v.validate("bar123"))
         val r = v.validate("baz")
         assertIs<ValidationResult.Invalid>(r)
-        assertEquals("must start with foo or bar", r.errors.single().message.message)
+        assertEquals("must start with foo or bar", r.errors.single().message.text)
     }
 
     @Test
