@@ -71,3 +71,21 @@ Bump `version` in `gradle.properties` to a non-`-SNAPSHOT` value, then:
 ```
 
 `SNAPSHOT` versions skip signing and only publish to `mavenLocal` / Sonatype snapshots.
+
+### CI
+
+GitHub Actions workflows under `.github/workflows/`:
+
+- `ci.yml` — build + test on every push/PR (jvm + iosSimulatorArm64).
+- `snapshot.yml` — publishes a snapshot on every push to `main`/`master`.
+- `release.yml` — triggered on tags matching `v*`; bump the version in `gradle.properties`, tag, push, done.
+
+Required GitHub secrets for `release.yml` and `snapshot.yml`:
+
+| Secret | Purpose |
+|--------|---------|
+| `MAVEN_CENTRAL_USERNAME` | Sonatype Central Portal user token |
+| `MAVEN_CENTRAL_PASSWORD` | Sonatype Central Portal token password |
+| `SIGNING_KEY` | Armored GPG private key (newlines preserved) |
+| `SIGNING_PASSWORD` | Passphrase for the GPG key |
+| `SIGNING_KEY_ID` | Short key id (optional) |
