@@ -49,3 +49,25 @@ Requires JDK 25.
 - `./gradlew build` — compile + test
 - `./gradlew :validation:jvmTest` — run jvm tests
 - `./gradlew publishToMavenLocal` — publish to `~/.m2/repository`
+
+## Releasing
+
+Publishing is wired through the [vanniktech-maven-publish](https://vanniktech.github.io/gradle-maven-publish-plugin/) plugin against Sonatype Central Portal.
+
+Required env vars / `~/.gradle/gradle.properties` entries for a real release:
+
+```properties
+mavenCentralUsername=<sonatype user token>
+mavenCentralPassword=<sonatype token password>
+signingInMemoryKey=<armored GPG private key, newlines as \n>
+signingInMemoryKeyPassword=<key passphrase>
+signingInMemoryKeyId=<short key id, optional>
+```
+
+Bump `version` in `gradle.properties` to a non-`-SNAPSHOT` value, then:
+
+```sh
+./gradlew publishAndReleaseToMavenCentral
+```
+
+`SNAPSHOT` versions skip signing and only publish to `mavenLocal` / Sonatype snapshots.
