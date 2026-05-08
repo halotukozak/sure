@@ -56,7 +56,39 @@ sealed interface ValidationError {
 
             fun AtMostCharacters(n: Int) = Message("must be at most $n characters")
 
+            fun AtLeastCharacters(n: Int) = Message("must be at least $n characters")
+
             fun AtMostItems(n: Int) = Message("must contain at most $n items")
+
+            fun AtLeastItems(n: Int) = Message("must contain at least $n items")
+
+            fun AtMost(value: Any?) = Message("must be at most $value")
+
+            fun AtLeast(value: Any?) = Message("must be at least $value")
+
+            val Positive = Message("must be positive")
+
+            val Negative = Message("must be negative")
+
+            val NonNegative = Message("must not be negative")
+
+            val NonPositive = Message("must not be positive")
+
+            fun StartsWith(prefix: String) = Message("must start with $prefix")
+
+            fun EndsWith(suffix: String) = Message("must end with $suffix")
+
+            fun Contains(substring: String) = Message("must contain $substring")
+
+            val Unique = Message("must contain unique items")
+
+            fun ContainsAll(values: Collection<*>) = Message("must contain all of ${values.joinToString()}")
+
+            fun NoneOf(values: Collection<*>) = Message("must not be one of ${values.joinToString()}")
+
+            val IsTrue = Message("must be true")
+
+            val IsFalse = Message("must be false")
 
             fun OneOf(values: Collection<*>) = Message("must be one of ${values.joinToString()}")
 

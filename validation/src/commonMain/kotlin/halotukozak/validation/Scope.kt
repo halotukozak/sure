@@ -62,6 +62,40 @@ internal class ItemScope<out T>(
     }
 }
 
+@PublishedApi
+internal class EntryScope<out T>(
+    val value: T,
+    key: Any?,
+    private val parent: ValidationScope<*>,
+    shortCircuit: Boolean = parent.shortCircuit,
+) : ValidationScope<T>("${parent.path}[$key]", shortCircuit) {
+    override fun report(error: ValidationError) = parent.report(error)
+
+    override fun raise(message: ValidationError.Message) {
+        report(ValidationError.Field(path, message))
+        if (shortCircuit) throw ScopeShortCircuit()
+    }
+}
+
+@PublishedApi
+internal class EphemeralScope<out T>(
+    val value: T,
+    parent: ValidationScope<*>,
+    shortCircuit: Boolean = parent.shortCircuit,
+) : ValidationScope<T>(parent.path, shortCircuit) {
+    private val _errors = mutableListOf<ValidationError>()
+    val errors: List<ValidationError> get() = _errors
+
+    override fun report(error: ValidationError) {
+        _errors += error
+    }
+
+    override fun raise(message: ValidationError.Message) {
+        _errors += ValidationError.Root(message)
+        if (shortCircuit) throw ScopeShortCircuit()
+    }
+}
+
 @OptIn(ExperimentalContracts::class)
 val <T> ValidationScope<T>.value: T
     get() {
@@ -73,5 +107,7 @@ val <T> ValidationScope<T>.value: T
             is RootScope -> value
             is FieldScope -> value
             is ItemScope -> value
+            is EntryScope -> value
+            is EphemeralScope -> value
         }
     }

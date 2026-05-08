@@ -20,6 +20,35 @@ class ChecksTest {
     }
 
     @Test
+    fun `notEmpty String rejects empty but accepts whitespace`() {
+        val v = Validator<String>(shortCircuit = false) { notEmpty() }
+        assertEquals(ValidationResult.Valid, v.validate("a"))
+        assertEquals(ValidationResult.Valid, v.validate(" "))
+        assertIs<ValidationResult.Invalid>(v.validate(""))
+    }
+
+    @Test
+    fun `hasPrefix enforces prefix`() {
+        val v = Validator<String>(shortCircuit = false) { hasPrefix("foo") }
+        assertEquals(ValidationResult.Valid, v.validate("foobar"))
+        assertIs<ValidationResult.Invalid>(v.validate("barfoo"))
+    }
+
+    @Test
+    fun `hasSuffix enforces suffix`() {
+        val v = Validator<String>(shortCircuit = false) { hasSuffix(".kt") }
+        assertEquals(ValidationResult.Valid, v.validate("App.kt"))
+        assertIs<ValidationResult.Invalid>(v.validate("App.java"))
+    }
+
+    @Test
+    fun `includes enforces substring`() {
+        val v = Validator<String>(shortCircuit = false) { includes("@") }
+        assertEquals(ValidationResult.Valid, v.validate("a@b"))
+        assertIs<ValidationResult.Invalid>(v.validate("ab"))
+    }
+
+    @Test
     fun `lengthIn enforces range`() {
         val v = Validator<String>(shortCircuit = false) { lengthIn(2..4) }
         assertEquals(ValidationResult.Valid, v.validate("ab"))
@@ -33,6 +62,77 @@ class ChecksTest {
         val v = Validator<String>(shortCircuit = false) { maxLength(3) }
         assertEquals(ValidationResult.Valid, v.validate("abc"))
         assertIs<ValidationResult.Invalid>(v.validate("abcd"))
+    }
+
+    @Test
+    fun `minLength rejects too short`() {
+        val v = Validator<String>(shortCircuit = false) { minLength(3) }
+        assertEquals(ValidationResult.Valid, v.validate("abc"))
+        assertEquals(ValidationResult.Valid, v.validate("abcd"))
+        assertIs<ValidationResult.Invalid>(v.validate("ab"))
+    }
+
+    @Test
+    fun `min rejects below`() {
+        val v = Validator<Int>(shortCircuit = false) { min(5) }
+        assertEquals(ValidationResult.Valid, v.validate(5))
+        assertEquals(ValidationResult.Valid, v.validate(10))
+        assertIs<ValidationResult.Invalid>(v.validate(4))
+    }
+
+    @Test
+    fun `max rejects above`() {
+        val v = Validator<Int>(shortCircuit = false) { max(5) }
+        assertEquals(ValidationResult.Valid, v.validate(5))
+        assertEquals(ValidationResult.Valid, v.validate(0))
+        assertIs<ValidationResult.Invalid>(v.validate(6))
+    }
+
+    @Test
+    fun `positive Int`() {
+        val v = Validator<Int>(shortCircuit = false) { positive() }
+        assertEquals(ValidationResult.Valid, v.validate(1))
+        assertIs<ValidationResult.Invalid>(v.validate(0))
+        assertIs<ValidationResult.Invalid>(v.validate(-1))
+    }
+
+    @Test
+    fun `positive Long`() {
+        val v = Validator<Long>(shortCircuit = false) { positive() }
+        assertEquals(ValidationResult.Valid, v.validate(1L))
+        assertIs<ValidationResult.Invalid>(v.validate(0L))
+    }
+
+    @Test
+    fun `positive Double`() {
+        val v = Validator<Double>(shortCircuit = false) { positive() }
+        assertEquals(ValidationResult.Valid, v.validate(0.5))
+        assertIs<ValidationResult.Invalid>(v.validate(0.0))
+        assertIs<ValidationResult.Invalid>(v.validate(-0.1))
+    }
+
+    @Test
+    fun `negative Int`() {
+        val v = Validator<Int>(shortCircuit = false) { negative() }
+        assertEquals(ValidationResult.Valid, v.validate(-1))
+        assertIs<ValidationResult.Invalid>(v.validate(0))
+        assertIs<ValidationResult.Invalid>(v.validate(1))
+    }
+
+    @Test
+    fun `nonNegative Int`() {
+        val v = Validator<Int>(shortCircuit = false) { nonNegative() }
+        assertEquals(ValidationResult.Valid, v.validate(0))
+        assertEquals(ValidationResult.Valid, v.validate(1))
+        assertIs<ValidationResult.Invalid>(v.validate(-1))
+    }
+
+    @Test
+    fun `nonPositive Int`() {
+        val v = Validator<Int>(shortCircuit = false) { nonPositive() }
+        assertEquals(ValidationResult.Valid, v.validate(0))
+        assertEquals(ValidationResult.Valid, v.validate(-1))
+        assertIs<ValidationResult.Invalid>(v.validate(1))
     }
 
     @Test
@@ -86,6 +186,135 @@ class ChecksTest {
         val v = Validator<List<Int>>(shortCircuit = false) { maxSize(2) }
         assertEquals(ValidationResult.Valid, v.validate(listOf(1, 2)))
         assertIs<ValidationResult.Invalid>(v.validate(listOf(1, 2, 3)))
+    }
+
+    @Test
+    fun `minSize enforces lower bound`() {
+        val v = Validator<List<Int>>(shortCircuit = false) { minSize(2) }
+        assertEquals(ValidationResult.Valid, v.validate(listOf(1, 2)))
+        assertEquals(ValidationResult.Valid, v.validate(listOf(1, 2, 3)))
+        assertIs<ValidationResult.Invalid>(v.validate(listOf(1)))
+    }
+
+    @Test
+    fun `unique rejects duplicates`() {
+        val v = Validator<List<Int>>(shortCircuit = false) { unique() }
+        assertEquals(ValidationResult.Valid, v.validate(listOf(1, 2, 3)))
+        assertEquals(ValidationResult.Valid, v.validate(emptyList<Int>()))
+        assertIs<ValidationResult.Invalid>(v.validate(listOf(1, 2, 1)))
+    }
+
+    @Test
+    fun `includesAll requires all values`() {
+        val v = Validator<List<Int>>(shortCircuit = false) { includesAll(listOf(1, 2)) }
+        assertEquals(ValidationResult.Valid, v.validate(listOf(1, 2, 3)))
+        assertEquals(ValidationResult.Valid, v.validate(listOf(1, 2)))
+        assertIs<ValidationResult.Invalid>(v.validate(listOf(1)))
+    }
+
+    @Test
+    fun `noneOf rejects forbidden`() {
+        val v = Validator<String>(shortCircuit = false) { noneOf(listOf("admin", "root")) }
+        assertEquals(ValidationResult.Valid, v.validate("alice"))
+        assertIs<ValidationResult.Invalid>(v.validate("admin"))
+    }
+
+    @Test
+    fun `isTrue accepts true only`() {
+        val v = Validator<Boolean>(shortCircuit = false) { isTrue() }
+        assertEquals(ValidationResult.Valid, v.validate(true))
+        assertIs<ValidationResult.Invalid>(v.validate(false))
+    }
+
+    @Test
+    fun `isFalse accepts false only`() {
+        val v = Validator<Boolean>(shortCircuit = false) { isFalse() }
+        assertEquals(ValidationResult.Valid, v.validate(false))
+        assertIs<ValidationResult.Invalid>(v.validate(true))
+    }
+
+    data class Signup(val password: String, val confirm: String)
+
+    @Test
+    fun `requireThat enables cross-field check`() {
+        val v = Validator<Signup>(shortCircuit = false) {
+            requireThat(password == confirm) { Message.Unsafe("passwords must match") }
+        }
+        assertEquals(ValidationResult.Valid, v.validate(Signup("abc", "abc")))
+        val r = v.validate(Signup("abc", "xyz"))
+        assertIs<ValidationResult.Invalid>(r)
+        assertEquals("passwords must match", r.errors.single().message.message)
+    }
+
+    @Test
+    fun `anyOf passes when any rule passes`() {
+        val v = Validator<String>(shortCircuit = false) {
+            anyOf(
+                { hasPrefix("foo") },
+                { hasPrefix("bar") },
+                message = { Message.Unsafe("must start with foo or bar") },
+            )
+        }
+        assertEquals(ValidationResult.Valid, v.validate("foo123"))
+        assertEquals(ValidationResult.Valid, v.validate("bar123"))
+        val r = v.validate("baz")
+        assertIs<ValidationResult.Invalid>(r)
+        assertEquals("must start with foo or bar", r.errors.single().message.message)
+    }
+
+    @Test
+    fun `not inverts a rule`() {
+        val v = Validator<String>(shortCircuit = false) {
+            not({ hasPrefix("admin_") }, message = { Message.Unsafe("must not be reserved") })
+        }
+        assertEquals(ValidationResult.Valid, v.validate("alice"))
+        assertIs<ValidationResult.Invalid>(v.validate("admin_root"))
+    }
+
+    @Test
+    fun `notEmpty Map rejects empty`() {
+        val v = Validator<Map<String, Int>>(shortCircuit = false) { notEmpty() }
+        assertEquals(ValidationResult.Valid, v.validate(mapOf("a" to 1)))
+        assertIs<ValidationResult.Invalid>(v.validate(emptyMap<String, Int>()))
+    }
+
+    data class Cfg(val flags: Map<String, String>)
+
+    @Test
+    fun `eachEntry validates per entry with bracket path`() {
+        val v = Validator<Cfg> {
+            field(::flags) {
+                eachEntry { _, _ -> notBlank() }
+            }
+        }
+        assertEquals(ValidationResult.Valid, v.validate(Cfg(mapOf("a" to "x", "b" to "y"))))
+        val r = v.validate(Cfg(mapOf("a" to "x", "b" to "")))
+        assertIs<ValidationResult.Invalid>(r)
+        val err = r.errors.single()
+        assertIs<ValidationError.Field>(err)
+        assertEquals("flags[b]", err.path)
+    }
+
+    @Test
+    fun `eachKey validates keys`() {
+        val v = Validator<Map<String, Int>>(shortCircuit = false) {
+            eachKey { notBlank() }
+        }
+        assertEquals(ValidationResult.Valid, v.validate(mapOf("a" to 1)))
+        assertIs<ValidationResult.Invalid>(v.validate(mapOf("" to 1)))
+    }
+
+    @Test
+    fun `eachValue validates values`() {
+        val v = Validator<Map<String, String>>(shortCircuit = false) {
+            eachValue { notBlank() }
+        }
+        assertEquals(ValidationResult.Valid, v.validate(mapOf("a" to "x")))
+        val r = v.validate(mapOf("a" to ""))
+        assertIs<ValidationResult.Invalid>(r)
+        val err = r.errors.single()
+        assertIs<ValidationError.Field>(err)
+        assertEquals("[a]", err.path)
     }
 
     data class Holder(val items: List<String>)
