@@ -24,6 +24,9 @@ java {
 dependencies {
     implementation(libs.symbolProcessingApi)
     testImplementation(kotlin("test"))
+    testImplementation(libs.kctfork.core)
+    testImplementation(libs.kctfork.ksp)
+    testImplementation(project(":validation"))
 }
 
 tasks.withType<Test>().configureEach {
