@@ -388,4 +388,11 @@ class ChecksTest {
         assertIs<ValidationError.Field>(err)
         assertEquals("name", err.path)
     }
+
+    @Test
+    fun `validated accepts supertype Validator via in-projection`() {
+        val anyV: Validator<Any> = Validator { /* always valid */ }
+        val outerV = Validator<Outer> { validated(::name, anyV) }
+        assertEquals(ValidationResult.Valid, outerV.validate(Outer("anything")))
+    }
 }

@@ -249,8 +249,9 @@ inline fun <T : Any> eachItem(
 context(scope: ValidationScope<*>)
 fun <T> validated(
     property: KProperty0<T>,
-    with: Validator<T>,
+    with: Validator<in T>,
 ) {
     val fieldScope = FieldScope(property.get(), property.name, scope, with.shortCircuit)
-    runScope { with.applyRules(fieldScope) }
+    @Suppress("UNCHECKED_CAST")
+    runScope { (with as Validator<T>).applyRules(fieldScope) }
 }
