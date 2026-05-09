@@ -390,9 +390,40 @@ class ChecksTest {
     }
 
     @Test
-    fun `validated accepts supertype Validator via in-projection`() {
-        val anyV: Validator<Any> = Validator { /* always valid */ }
-        val outerV = Validator<Outer> { validated(::name, anyV) }
-        assertEquals(ValidationResult.Valid, outerV.validate(Outer("anything")))
+    fun `validated inherits parent shortCircuit not embedded validator's`() {
+        val nameV =
+            Validator<String>(shortCircuit = true) {
+                notBlank()
+                lengthIn(10..20)
+            }
+        val outerV =
+            Validator<Outer>(shortCircuit = false) {
+                validated(::name, nameV)
+            }
+        val r = outerV.validate(Outer(""))
+        assertIs<ValidationResult.Invalid>(r)
+        assertEquals(2, r.errors.size, "parent accumulating must override embedded failFast: $r")
+    }
+
+    data class OptName(
+        val name: String?,
+    )
+
+    @Test
+    fun `validatedOptional skips null`() {
+        val nameV = Validator<String> { notBlank() }
+        val v = Validator<OptName> { validatedOptional(::name, nameV) }
+        assertEquals(ValidationResult.Valid, v.validate(OptName(null)))
+    }
+
+    @Test
+    fun `validatedOptional runs validator on non-null`() {
+        val nameV = Validator<String> { notBlank() }
+        val v = Validator<OptName> { validatedOptional(::name, nameV) }
+        val r = v.validate(OptName(""))
+        assertIs<ValidationResult.Invalid>(r)
+        val err = r.errors.single()
+        assertIs<ValidationError.Field>(err)
+        assertEquals("name", err.path)
     }
 }

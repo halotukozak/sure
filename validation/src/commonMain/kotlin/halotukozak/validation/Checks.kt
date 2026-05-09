@@ -247,11 +247,24 @@ inline fun <T : Any> eachItem(
 }
 
 context(scope: ValidationScope<*>)
-fun <T> validated(
+fun <T : Any> validated(
     property: KProperty0<T>,
-    with: Validator<in T>,
+    with: Validator<T>,
+    shortCircuit: Boolean = scope.shortCircuit,
 ) {
-    val fieldScope = FieldScope(property.get(), property.name, scope, with.shortCircuit)
-    @Suppress("UNCHECKED_CAST")
-    runScope { (with as Validator<T>).applyRules(fieldScope) }
+    val fieldScope = FieldScope(property.get(), property.name, scope, shortCircuit)
+    runScope { with.applyRules(fieldScope) }
+}
+
+context(scope: ValidationScope<*>)
+fun <T : Any> validatedOptional(
+    property: KProperty0<T?>,
+    with: Validator<T>,
+    shortCircuit: Boolean = scope.shortCircuit,
+) {
+    val value = property.get() ?: return
+    {
+        val fieldScope = FieldScope(value, property.name, scope, shortCircuit)
+        runScope { with.applyRules(fieldScope) }
+    }
 }

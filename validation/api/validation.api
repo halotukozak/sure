@@ -52,7 +52,10 @@ public final class halotukozak/validation/ChecksKt {
 	public static final fun requireThat (Lhalotukozak/validation/ValidationScope;ZLkotlin/jvm/functions/Function0;)V
 	public static final fun sizeIn (Lhalotukozak/validation/ValidationScope;Lkotlin/ranges/IntRange;)V
 	public static final fun unique (Lhalotukozak/validation/ValidationScope;)V
-	public static final fun validated (Lhalotukozak/validation/ValidationScope;Lkotlin/reflect/KProperty0;Lhalotukozak/validation/Validator;)V
+	public static final fun validated (Lhalotukozak/validation/ValidationScope;Lkotlin/reflect/KProperty0;Lhalotukozak/validation/Validator;Z)V
+	public static synthetic fun validated$default (Lhalotukozak/validation/ValidationScope;Lkotlin/reflect/KProperty0;Lhalotukozak/validation/Validator;ZILjava/lang/Object;)V
+	public static final fun validatedOptional (Lhalotukozak/validation/ValidationScope;Lkotlin/reflect/KProperty0;Lhalotukozak/validation/Validator;Z)V
+	public static synthetic fun validatedOptional$default (Lhalotukozak/validation/ValidationScope;Lkotlin/reflect/KProperty0;Lhalotukozak/validation/Validator;ZILjava/lang/Object;)V
 }
 
 public final class halotukozak/validation/EntryScope : halotukozak/validation/ValidationScope {
