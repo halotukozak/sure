@@ -15,11 +15,9 @@ class Message(
      * Renders the message. Calls [translator] with [key] and [args]; falls back to [text] when
      * the translator returns null or no translator is supplied.
      */
-    fun render(translator: Translator? = null): String =
-        translator?.translate(key, args) ?: text
+    fun render(translator: Translator? = null): String = translator?.translate(key, args) ?: text
 
-    override fun equals(other: Any?): Boolean =
-        this === other || (other is Message && key == other.key && args == other.args)
+    override fun equals(other: Any?): Boolean = this === other || (other is Message && key == other.key && args == other.args)
 
     override fun hashCode(): Int = key.hashCode() * 31 + args.hashCode()
 
@@ -56,38 +54,27 @@ class Message(
 
         fun InRange(range: ClosedRange<*>) = inRange(range.toString())
 
-        private fun inRange(rangeRepr: String) =
-            Message("validation.inRange", listOf(rangeRepr), "must be in $rangeRepr")
+        private fun inRange(rangeRepr: String) = Message("validation.inRange", listOf(rangeRepr), "must be in $rangeRepr")
 
-        fun LengthIn(range: IntRange) =
-            Message("validation.lengthIn", listOf(range.toString()), "must be $range characters")
+        fun LengthIn(range: IntRange) = Message("validation.lengthIn", listOf(range.toString()), "must be $range characters")
 
-        fun AtMostCharacters(n: Int) =
-            Message("validation.atMostCharacters", listOf(n.toString()), "must be at most $n characters")
+        fun AtMostCharacters(n: Int) = Message("validation.atMostCharacters", listOf(n.toString()), "must be at most $n characters")
 
-        fun AtLeastCharacters(n: Int) =
-            Message("validation.atLeastCharacters", listOf(n.toString()), "must be at least $n characters")
+        fun AtLeastCharacters(n: Int) = Message("validation.atLeastCharacters", listOf(n.toString()), "must be at least $n characters")
 
-        fun AtMostItems(n: Int) =
-            Message("validation.atMostItems", listOf(n.toString()), "must contain at most $n items")
+        fun AtMostItems(n: Int) = Message("validation.atMostItems", listOf(n.toString()), "must contain at most $n items")
 
-        fun AtLeastItems(n: Int) =
-            Message("validation.atLeastItems", listOf(n.toString()), "must contain at least $n items")
+        fun AtLeastItems(n: Int) = Message("validation.atLeastItems", listOf(n.toString()), "must contain at least $n items")
 
-        fun AtMost(value: Any?) =
-            Message("validation.atMost", listOf(value.toString()), "must be at most $value")
+        fun AtMost(value: Any?) = Message("validation.atMost", listOf(value.toString()), "must be at most $value")
 
-        fun AtLeast(value: Any?) =
-            Message("validation.atLeast", listOf(value.toString()), "must be at least $value")
+        fun AtLeast(value: Any?) = Message("validation.atLeast", listOf(value.toString()), "must be at least $value")
 
-        fun StartsWith(prefix: String) =
-            Message("validation.startsWith", listOf(prefix), "must start with $prefix")
+        fun StartsWith(prefix: String) = Message("validation.startsWith", listOf(prefix), "must start with $prefix")
 
-        fun EndsWith(suffix: String) =
-            Message("validation.endsWith", listOf(suffix), "must end with $suffix")
+        fun EndsWith(suffix: String) = Message("validation.endsWith", listOf(suffix), "must end with $suffix")
 
-        fun Contains(substring: String) =
-            Message("validation.contains", listOf(substring), "must contain $substring")
+        fun Contains(substring: String) = Message("validation.contains", listOf(substring), "must contain $substring")
 
         fun ContainsAll(values: Collection<*>) =
             Message(
@@ -110,15 +97,16 @@ class Message(
                 "must not be one of ${values.joinToString()}",
             )
 
-        fun Matches(pattern: String) =
-            Message("validation.matches", listOf(pattern), "must match $pattern")
+        fun Matches(pattern: String) = Message("validation.matches", listOf(pattern), "must match $pattern")
 
-        fun TypeMismatched(expected: KClass<*>, actual: KClass<*>) =
-            Message(
-                "validation.typeMismatched",
-                listOf(expected.simpleName.orEmpty(), actual.simpleName.orEmpty()),
-                "expected type ${expected.simpleName}, but got ${actual.simpleName}",
-            )
+        fun TypeMismatched(
+            expected: KClass<*>,
+            actual: KClass<*>,
+        ) = Message(
+            "validation.typeMismatched",
+            listOf(expected.simpleName.orEmpty(), actual.simpleName.orEmpty()),
+            "expected type ${expected.simpleName}, but got ${actual.simpleName}",
+        )
 
         /**
          * Escape hatch — a free-text message with no translation key. The text doubles as the key,
@@ -130,5 +118,8 @@ class Message(
 
 fun interface Translator {
     /** Returns the localized rendering for [key] / [args], or `null` when not in catalogue. */
-    fun translate(key: String, args: List<String>): String?
+    fun translate(
+        key: String,
+        args: List<String>,
+    ): String?
 }
