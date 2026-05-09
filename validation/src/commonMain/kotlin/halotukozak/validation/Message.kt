@@ -1,90 +1,134 @@
 package halotukozak.validation
 
-import kotlinx.serialization.KSerializer
-import kotlinx.serialization.Serializable
-import kotlinx.serialization.descriptors.PrimitiveKind
-import kotlinx.serialization.descriptors.PrimitiveSerialDescriptor
-import kotlinx.serialization.descriptors.SerialDescriptor
-import kotlinx.serialization.encoding.Decoder
-import kotlinx.serialization.encoding.Encoder
 import kotlin.reflect.KClass
 
 @Suppress("FunctionName")
-@Serializable(with = Message.Serializer::class)
-open class Message(val text: String) {
-    override fun equals(other: Any?): Boolean = this === other || (other is Message && text == other.text)
+class Message(
+    /** Stable identifier for translation lookup, e.g. `"validation.lengthIn"`. */
+    val key: String,
+    /** Arguments referenced by the translation template, pre-stringified for transport safety. */
+    val args: List<String> = emptyList(),
+    /** Default English rendering, used as fallback when no translator resolves [key]. */
+    val text: String = key,
+) {
+    /**
+     * Renders the message. Calls [translator] with [key] and [args]; falls back to [text] when
+     * the translator returns null or no translator is supplied.
+     */
+    fun render(translator: Translator? = null): String =
+        translator?.translate(key, args) ?: text
 
-    override fun hashCode(): Int = text.hashCode()
+    override fun equals(other: Any?): Boolean =
+        this === other || (other is Message && key == other.key && args == other.args)
+
+    override fun hashCode(): Int = key.hashCode() * 31 + args.hashCode()
 
     override fun toString(): String = text
 
-    object Serializer : KSerializer<Message> {
-        override val descriptor: SerialDescriptor = PrimitiveSerialDescriptor("Message", PrimitiveKind.STRING)
+    companion object {
+        val NotBlank = Message("validation.notBlank", text = "must not be blank")
 
-        override fun serialize(encoder: Encoder, value: Message) = encoder.encodeString(value.text)
+        val NotNull = Message("validation.notNull", text = "must not be null")
 
-        override fun deserialize(decoder: Decoder): Message = Message(decoder.decodeString())
+        val NotEmpty = Message("validation.notEmpty", text = "must not be empty")
+
+        val LeadingOrTrailingSpace =
+            Message("validation.noLeadingOrTrailingSpace", text = "must not have leading or trailing spaces")
+
+        val ConsecutiveSpaces =
+            Message("validation.noConsecutiveSpaces", text = "must not contain consecutive spaces")
+
+        val Positive = Message("validation.positive", text = "must be positive")
+
+        val Negative = Message("validation.negative", text = "must be negative")
+
+        val NonNegative = Message("validation.nonNegative", text = "must not be negative")
+
+        val NonPositive = Message("validation.nonPositive", text = "must not be positive")
+
+        val Unique = Message("validation.unique", text = "must contain unique items")
+
+        val IsTrue = Message("validation.isTrue", text = "must be true")
+
+        val IsFalse = Message("validation.isFalse", text = "must be false")
+
+        fun InRange(range: IntRange) = inRange(range.toString())
+
+        fun InRange(range: ClosedRange<*>) = inRange(range.toString())
+
+        private fun inRange(rangeRepr: String) =
+            Message("validation.inRange", listOf(rangeRepr), "must be in $rangeRepr")
+
+        fun LengthIn(range: IntRange) =
+            Message("validation.lengthIn", listOf(range.toString()), "must be $range characters")
+
+        fun AtMostCharacters(n: Int) =
+            Message("validation.atMostCharacters", listOf(n.toString()), "must be at most $n characters")
+
+        fun AtLeastCharacters(n: Int) =
+            Message("validation.atLeastCharacters", listOf(n.toString()), "must be at least $n characters")
+
+        fun AtMostItems(n: Int) =
+            Message("validation.atMostItems", listOf(n.toString()), "must contain at most $n items")
+
+        fun AtLeastItems(n: Int) =
+            Message("validation.atLeastItems", listOf(n.toString()), "must contain at least $n items")
+
+        fun AtMost(value: Any?) =
+            Message("validation.atMost", listOf(value.toString()), "must be at most $value")
+
+        fun AtLeast(value: Any?) =
+            Message("validation.atLeast", listOf(value.toString()), "must be at least $value")
+
+        fun StartsWith(prefix: String) =
+            Message("validation.startsWith", listOf(prefix), "must start with $prefix")
+
+        fun EndsWith(suffix: String) =
+            Message("validation.endsWith", listOf(suffix), "must end with $suffix")
+
+        fun Contains(substring: String) =
+            Message("validation.contains", listOf(substring), "must contain $substring")
+
+        fun ContainsAll(values: Collection<*>) =
+            Message(
+                "validation.containsAll",
+                values.map { it.toString() },
+                "must contain all of ${values.joinToString()}",
+            )
+
+        fun OneOf(values: Collection<*>) =
+            Message(
+                "validation.oneOf",
+                values.map { it.toString() },
+                "must be one of ${values.joinToString()}",
+            )
+
+        fun NoneOf(values: Collection<*>) =
+            Message(
+                "validation.noneOf",
+                values.map { it.toString() },
+                "must not be one of ${values.joinToString()}",
+            )
+
+        fun Matches(pattern: String) =
+            Message("validation.matches", listOf(pattern), "must match $pattern")
+
+        fun TypeMismatched(expected: KClass<*>, actual: KClass<*>) =
+            Message(
+                "validation.typeMismatched",
+                listOf(expected.simpleName.orEmpty(), actual.simpleName.orEmpty()),
+                "expected type ${expected.simpleName}, but got ${actual.simpleName}",
+            )
+
+        /**
+         * Escape hatch — a free-text message with no translation key. The text doubles as the key,
+         * so two `Unsafe` messages with the same body compare equal.
+         */
+        fun Unsafe(text: String) = Message(key = text, text = text)
     }
+}
 
-    object NotBlank : Message("must not be blank")
-
-    object NotNull : Message("must not be null")
-
-    object NotEmpty : Message("must not be empty")
-
-    object LeadingOrTrailingSpace : Message("must not have leading or trailing spaces")
-
-    object ConsecutiveSpaces : Message("must not contain consecutive spaces")
-
-    object Positive : Message("must be positive")
-
-    object Negative : Message("must be negative")
-
-    object NonNegative : Message("must not be negative")
-
-    object NonPositive : Message("must not be positive")
-
-    object Unique : Message("must contain unique items")
-
-    object IsTrue : Message("must be true")
-
-    object IsFalse : Message("must be false")
-
-    class InRange private constructor(text: String) : Message("must be in $text") {
-        constructor(range: IntRange) : this(range.toString())
-        constructor(range: ClosedRange<*>) : this(range.toString())
-    }
-
-    class LengthIn(range: IntRange) : Message("must be $range characters")
-
-    class AtMostCharacters(n: Int) : Message("must be at most $n characters")
-
-    class AtLeastCharacters(n: Int) : Message("must be at least $n characters")
-
-    class AtMostItems(n: Int) : Message("must contain at most $n items")
-
-    class AtLeastItems(n: Int) : Message("must contain at least $n items")
-
-    class AtMost(value: Any?) : Message("must be at most $value")
-
-    class AtLeast(value: Any?) : Message("must be at least $value")
-
-    class StartsWith(prefix: String) : Message("must start with $prefix")
-
-    class EndsWith(suffix: String) : Message("must end with $suffix")
-
-    class Contains(substring: String) : Message("must contain $substring")
-
-    class ContainsAll(values: Collection<*>) : Message("must contain all of ${values.joinToString()}")
-
-    class OneOf(values: Collection<*>) : Message("must be one of ${values.joinToString()}")
-
-    class NoneOf(values: Collection<*>) : Message("must not be one of ${values.joinToString()}")
-
-    class Matches(pattern: String) : Message("must match $pattern")
-
-    class TypeMismatched(expected: KClass<*>, actual: KClass<*>) :
-        Message("expected type ${expected.simpleName}, but got ${actual.simpleName}")
-
-    class Unsafe(text: String) : Message(text)
+fun interface Translator {
+    /** Returns the localized rendering for [key] / [args], or `null` when not in catalogue. */
+    fun translate(key: String, args: List<String>): String?
 }

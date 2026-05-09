@@ -2,7 +2,6 @@ import com.vanniktech.maven.publish.SonatypeHost
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
-    alias(libs.plugins.kotlinPluginSerialization)
     alias(libs.plugins.mavenPublish)
     alias(libs.plugins.binaryCompatibilityValidator)
     alias(libs.plugins.ktlint)
@@ -37,7 +36,6 @@ kotlin {
 
     sourceSets {
         commonMain.dependencies {
-            implementation(libs.kotlinxSerialization)
             implementation(libs.kotlinxCoroutines)
         }
         commonTest.dependencies {
