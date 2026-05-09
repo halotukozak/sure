@@ -88,6 +88,11 @@ public final class halotukozak/validation/Message {
 	public static final field Companion Lhalotukozak/validation/Message$Companion;
 	public fun <init> (Ljava/lang/String;Ljava/util/List;Ljava/lang/String;)V
 	public synthetic fun <init> (Ljava/lang/String;Ljava/util/List;Ljava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Ljava/util/List;
+	public final fun component3 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;Ljava/util/List;Ljava/lang/String;)Lhalotukozak/validation/Message;
+	public static synthetic fun copy$default (Lhalotukozak/validation/Message;Ljava/lang/String;Ljava/util/List;Ljava/lang/String;ILjava/lang/Object;)Lhalotukozak/validation/Message;
 	public fun equals (Ljava/lang/Object;)Z
 	public final fun getArgs ()Ljava/util/List;
 	public final fun getKey ()Ljava/lang/String;

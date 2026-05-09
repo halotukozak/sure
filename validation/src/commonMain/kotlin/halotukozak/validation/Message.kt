@@ -3,7 +3,7 @@ package halotukozak.validation
 import kotlin.reflect.KClass
 
 @Suppress("FunctionName")
-class Message(
+data class Message(
     /** Stable identifier for translation lookup, e.g. `"validation.lengthIn"`. */
     val key: String,
     /** Arguments referenced by the translation template, pre-stringified for transport safety. */
@@ -15,11 +15,8 @@ class Message(
      * Renders the message. Calls [translator] with [key] and [args]; falls back to [text] when
      * the translator returns null or no translator is supplied.
      */
-    fun render(translator: Translator? = null): String = translator?.translate(key, args) ?: text
-
-    override fun equals(other: Any?): Boolean = this === other || (other is Message && key == other.key && args == other.args)
-
-    override fun hashCode(): Int = key.hashCode() * 31 + args.hashCode()
+    fun render(translator: Translator? = null): String =
+        translator?.translate(key, args) ?: text
 
     override fun toString(): String = text
 
@@ -108,10 +105,7 @@ class Message(
             "expected type ${expected.simpleName}, but got ${actual.simpleName}",
         )
 
-        /**
-         * Escape hatch — a free-text message with no translation key. The text doubles as the key,
-         * so two `Unsafe` messages with the same body compare equal.
-         */
+        /** Escape hatch — a free-text message with no translation key. The text doubles as the key. */
         fun Unsafe(text: String) = Message(key = text, text = text)
     }
 }

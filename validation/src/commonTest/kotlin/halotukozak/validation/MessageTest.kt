@@ -6,9 +6,9 @@ import kotlin.test.assertNotEquals
 
 class MessageTest {
     @Test
-    fun `equality is keyed on key and args, not text`() {
+    fun `messages with same key args and text are equal`() {
         val a = Message("validation.notBlank", text = "must not be blank")
-        val b = Message("validation.notBlank", text = "translated text")
+        val b = Message("validation.notBlank", text = "must not be blank")
         assertEquals(a, b)
         assertEquals(a.hashCode(), b.hashCode())
     }
@@ -19,20 +19,23 @@ class MessageTest {
     }
 
     @Test
-    fun `messages with same key but different args are not equal`() {
+    fun `messages with different args are not equal`() {
         assertNotEquals(Message.LengthIn(1..5), Message.LengthIn(1..6))
     }
 
     @Test
-    fun `messages with same key and args are equal`() {
-        assertEquals(Message.LengthIn(1..5), Message.LengthIn(1..5))
+    fun `messages with different text are not equal`() {
+        assertNotEquals(
+            Message("validation.notBlank", text = "must not be blank"),
+            Message("validation.notBlank", text = "translated"),
+        )
     }
 
     @Test
-    fun `catalog member equals freshly constructed Message with matching key and args`() {
+    fun `catalog member equals freshly constructed Message with matching fields`() {
         assertEquals(
             Message.NotBlank,
-            Message("validation.notBlank", text = "anything"),
+            Message("validation.notBlank", text = "must not be blank"),
         )
     }
 
@@ -104,6 +107,14 @@ class MessageTest {
         val custom = Message("myapp.email", text = "invalid email")
         assertEquals("myapp.email", custom.key)
         assertEquals("invalid email", custom.text)
-        assertEquals(custom, Message("myapp.email"))
+        assertEquals(custom, Message("myapp.email", text = "invalid email"))
+    }
+
+    @Test
+    fun `data class copy enables tweaking text without rebuilding`() {
+        val translated = Message.NotBlank.copy(text = "nie moze byc puste")
+        assertEquals("nie moze byc puste", translated.text)
+        assertEquals(Message.NotBlank.key, translated.key)
+        assertEquals(Message.NotBlank.args, translated.args)
     }
 }
