@@ -18,7 +18,10 @@ sealed class ValidationScope<out T>(
 }
 
 @PublishedApi
-internal class RootScope<out T>(val value: T, shortCircuit: Boolean) : ValidationScope<T>("", shortCircuit) {
+internal class RootScope<out T>(
+    val value: T,
+    shortCircuit: Boolean,
+) : ValidationScope<T>("", shortCircuit) {
     private val _errors = mutableListOf<ValidationError>()
     val errors: List<ValidationError> get() = _errors
 
@@ -96,9 +99,7 @@ internal class EphemeralScope<out T>(
     }
 }
 
-// Kept as an extension (not a base-class val) so the contract below can smart-cast the receiver:
-// after `if (scope.value != null) ...`, the scope is treated as `ValidationScope<T & Any>`. Validator.nullable()
-// relies on that to invoke the parent's `applyRules: ValidationScope<T>.() -> Unit` without an unchecked cast.
+// Kept as an extension (not a base-class val) so the contract below can smart-cast the receiver
 @OptIn(ExperimentalContracts::class)
 val <T> ValidationScope<T>.value: T
     get() {
