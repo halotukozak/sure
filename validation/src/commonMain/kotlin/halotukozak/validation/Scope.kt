@@ -31,6 +31,7 @@ internal class RootScope<out T>(
 
     override fun raise(message: Message) {
         report(ValidationError.Root(message))
+        // intentional control flow: unwinds to the nearest runScope { } so siblings stop running
         if (shortCircuit) throw ScopeShortCircuit()
     }
 }
