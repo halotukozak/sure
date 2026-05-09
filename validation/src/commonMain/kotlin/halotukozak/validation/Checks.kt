@@ -262,8 +262,8 @@ fun <T : Any> validatedOptional(
     with: Validator<T>,
     shortCircuit: Boolean = scope.shortCircuit,
 ) {
-    val value = property.get() ?: return
-    {
+    val value = property.get()
+    if (value != null) {
         val fieldScope = FieldScope(value, property.name, scope, shortCircuit)
         runScope { with.applyRules(fieldScope) }
     }

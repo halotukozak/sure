@@ -96,6 +96,9 @@ internal class EphemeralScope<out T>(
     }
 }
 
+// Kept as an extension (not a base-class val) so the contract below can smart-cast the receiver:
+// after `if (scope.value != null) ...`, the scope is treated as `ValidationScope<T & Any>`. Validator.nullable()
+// relies on that to invoke the parent's `applyRules: ValidationScope<T>.() -> Unit` without an unchecked cast.
 @OptIn(ExperimentalContracts::class)
 val <T> ValidationScope<T>.value: T
     get() {
