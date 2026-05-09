@@ -15,6 +15,12 @@ sealed class ValidationScope<out T>(
     abstract fun raise(message: Message)
 
     internal abstract fun report(error: ValidationError)
+
+    /** Reports [error] and, when fail-fast, unwinds to the nearest runScope { } so siblings stop running. */
+    protected fun fail(error: ValidationError) {
+        report(error)
+        if (shortCircuit) throw ScopeShortCircuit()
+    }
 }
 
 @PublishedApi
@@ -29,11 +35,7 @@ internal class RootScope<out T>(
         _errors += error
     }
 
-    override fun raise(message: Message) {
-        report(ValidationError.Root(message))
-        // intentional control flow: unwinds to the nearest runScope { } so siblings stop running
-        if (shortCircuit) throw ScopeShortCircuit()
-    }
+    override fun raise(message: Message) = fail(ValidationError.Root(message))
 }
 
 @PublishedApi
@@ -45,10 +47,7 @@ internal class FieldScope<out T>(
 ) : ValidationScope<T>(if (parent.path.isEmpty()) name else "${parent.path}.$name", shortCircuit) {
     override fun report(error: ValidationError) = parent.report(error)
 
-    override fun raise(message: Message) {
-        report(ValidationError.Field(path, message))
-        if (shortCircuit) throw ScopeShortCircuit()
-    }
+    override fun raise(message: Message) = fail(ValidationError.Field(path, message))
 }
 
 @PublishedApi
@@ -60,10 +59,7 @@ internal class ItemScope<out T>(
 ) : ValidationScope<T>("${parent.path}[$index]", shortCircuit) {
     override fun report(error: ValidationError) = parent.report(error)
 
-    override fun raise(message: Message) {
-        report(ValidationError.Element(parent.path, index, message))
-        if (shortCircuit) throw ScopeShortCircuit()
-    }
+    override fun raise(message: Message) = fail(ValidationError.Element(parent.path, index, message))
 }
 
 @PublishedApi
@@ -75,10 +71,7 @@ internal class EntryScope<out T>(
 ) : ValidationScope<T>("${parent.path}[$key]", shortCircuit) {
     override fun report(error: ValidationError) = parent.report(error)
 
-    override fun raise(message: Message) {
-        report(ValidationError.Field(path, message))
-        if (shortCircuit) throw ScopeShortCircuit()
-    }
+    override fun raise(message: Message) = fail(ValidationError.Field(path, message))
 }
 
 @PublishedApi
@@ -94,10 +87,7 @@ internal class EphemeralScope<out T>(
         _errors += error
     }
 
-    override fun raise(message: Message) {
-        _errors += ValidationError.Root(message)
-        if (shortCircuit) throw ScopeShortCircuit()
-    }
+    override fun raise(message: Message) = fail(ValidationError.Root(message))
 }
 
 // Kept as an extension (not a base-class val) so the contract below can smart-cast the receiver

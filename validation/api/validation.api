@@ -237,6 +237,7 @@ public final class halotukozak/validation/ValidationResult$Valid : halotukozak/v
 
 public abstract class halotukozak/validation/ValidationScope {
 	public synthetic fun <init> (Ljava/lang/String;ZLkotlin/jvm/internal/DefaultConstructorMarker;)V
+	protected final fun fail (Lhalotukozak/validation/ValidationError;)V
 	public final fun getShortCircuit ()Z
 	public abstract fun raise (Lhalotukozak/validation/Message;)V
 }
