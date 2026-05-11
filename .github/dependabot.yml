@@ -1,0 +1,21 @@
+version: 2
+updates:
+  - package-ecosystem: gradle
+    directory: /
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 10
+    groups:
+      kotlin:
+        patterns:
+          - "org.jetbrains.kotlin*"
+          - "org.jetbrains.kotlinx*"
+      gradle-plugins:
+        patterns:
+          - "com.vanniktech*"
+          - "org.jlleitschuh.gradle*"
+          - "com.google.devtools.ksp*"
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
