@@ -7,9 +7,19 @@ plugins {
     alias(libs.plugins.binaryCompatibilityValidator) apply false
     alias(libs.plugins.ktlint) apply false
     alias(libs.plugins.kover)
+    alias(libs.plugins.dokka)
 }
 
 dependencies {
     kover(project(":validation"))
     kover(project(":validation-ksp"))
+    dokka(project(":validation"))
+    dokka(project(":validation-ksp"))
+}
+
+dokka {
+    moduleName.set("sure")
+    pluginsConfiguration.html {
+        footerMessage.set("&copy; halotukozak")
+    }
 }

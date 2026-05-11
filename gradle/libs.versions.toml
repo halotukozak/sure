@@ -9,6 +9,7 @@ ktlint = "14.2.0"
 kover = "0.9.8"
 binaryCompatibilityValidator = "0.18.1"
 kctfork = "0.12.1"
+dokka = "2.2.0"
 
 [libraries]
 kotlinGradlePlugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
@@ -31,3 +32,4 @@ mavenPublish = { id = "com.vanniktech.maven.publish", version.ref = "mavenPublis
 ktlint = { id = "org.jlleitschuh.gradle.ktlint", version.ref = "ktlint" }
 kover = { id = "org.jetbrains.kotlinx.kover", version.ref = "kover" }
 binaryCompatibilityValidator = { id = "org.jetbrains.kotlinx.binary-compatibility-validator", version.ref = "binaryCompatibilityValidator" }
+dokka = { id = "org.jetbrains.dokka", version.ref = "dokka" }

@@ -2,6 +2,7 @@
 
 [![CI](https://github.com/halotukozak/sure/actions/workflows/ci.yml/badge.svg)](https://github.com/halotukozak/sure/actions/workflows/ci.yml)
 [![codecov](https://codecov.io/gh/halotukozak/sure/branch/main/graph/badge.svg)](https://codecov.io/gh/halotukozak/sure)
+[![docs](https://img.shields.io/badge/docs-github--pages-blue)](https://halotukozak.github.io/sure/)
 
 Type-safe value validation DSL for Kotlin Multiplatform.
 
