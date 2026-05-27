@@ -2,7 +2,7 @@
 kotlin = "2.3.21"
 kotlinxDatetime = "0.7.1"
 kotlinxSerializationJSON = "1.11.0"
-kotlinxCoroutines = "1.10.2"
+kotlinxCoroutines = "1.11.0"
 ksp = "2.3.9"
 mavenPublish = "0.33.0"
 ktlint = "14.2.0"
