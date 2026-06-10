@@ -8,7 +8,7 @@ mavenPublish = "0.36.0"
 ktlint = "14.2.0"
 kover = "0.9.8"
 binaryCompatibilityValidator = "0.18.1"
-kctfork = "0.12.1"
+kctfork = "0.13.0"
 dokka = "2.2.0"
 
 [libraries]
