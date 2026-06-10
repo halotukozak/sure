@@ -9,7 +9,7 @@ plugins {
     id("org.gradle.toolchains.foojay-resolver-convention") version "1.0.0"
 }
 
-include(":validation")
-include(":validation-ksp")
+include(":sure")
+include(":sure-ksp")
 
 rootProject.name = "sure"

@@ -8,9 +8,9 @@ Type-safe value validation DSL for Kotlin Multiplatform.
 
 ## Modules
 
-- `:validation` — KMP library (jvm, iosX64, iosArm64, iosSimulatorArm64). Core API: `Validator<T>`, `ValidationScope`, `@Validatable`,
+- `:sure` — KMP library (jvm, iosX64, iosArm64, iosSimulatorArm64). Core API: `Validator<T>`, `ValidationScope`, `@Validatable`,
   built-in checks.
-- `:validation-ksp` — KSP processor. Generates `T.validate()` extensions and `validatorFor<T>()` registry for every `@Validatable` class.
+- `:sure-ksp` — KSP processor. Generates `T.validate()` extensions and `validatorFor<T>()` registry for every `@Validatable` class.
 
 ## Usage
 
@@ -36,7 +36,7 @@ plugins {
 }
 
 dependencies {
-  implementation("io.github.halotukozak:validation:0.1.0")
-  ksp("io.github.halotukozak:validation-ksp:0.1.0")
+  implementation("io.github.halotukozak:sure:0.1.0")
+  ksp("io.github.halotukozak:sure-ksp:0.1.0")
 }
 ```
