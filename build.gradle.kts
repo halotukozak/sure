@@ -11,10 +11,10 @@ plugins {
 }
 
 dependencies {
-    kover(project(":validation"))
-    kover(project(":validation-ksp"))
-    dokka(project(":validation"))
-    dokka(project(":validation-ksp"))
+    kover(project(":sure"))
+    kover(project(":sure-ksp"))
+    dokka(project(":sure"))
+    dokka(project(":sure-ksp"))
 }
 
 dokka {
