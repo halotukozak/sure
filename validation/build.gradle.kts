@@ -20,14 +20,14 @@ kotlin {
     iosSimulatorArm64()
 
     compilerOptions {
-        freeCompilerArgs.addAll("-Xcontext-parameters", "-Xexpect-actual-classes")
+        freeCompilerArgs.addAll("-Xexpect-actual-classes")
     }
 
     targets.all {
         compilations.all {
             compileTaskProvider.configure {
                 compilerOptions {
-                    freeCompilerArgs.addAll("-Xcontext-parameters", "-Xexpect-actual-classes")
+                    freeCompilerArgs.addAll("-Xexpect-actual-classes")
                 }
             }
         }

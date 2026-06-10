@@ -39,10 +39,4 @@ dependencies {
   implementation("io.github.halotukozak:validation:0.1.0")
   ksp("io.github.halotukozak:validation-ksp:0.1.0")
 }
-
-kotlin {
-  compilerOptions {
-    freeCompilerArgs.add("-Xcontext-parameters")
-  }
-}
 ```
