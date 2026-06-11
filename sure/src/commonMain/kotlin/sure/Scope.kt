@@ -7,11 +7,12 @@ import kotlin.contracts.contract
 annotation class ValidationDsl
 
 @ValidationDsl
-sealed class ValidationScope<out T>(
-    internal val path: String,
+sealed class ValidationScope<out T> {
+    internal abstract val path: String
+
     @PublishedApi
-    internal val shortCircuit: Boolean,
-) {
+    internal abstract val shortCircuit: Boolean
+
     internal abstract fun addError(error: ValidationError)
 
     abstract fun raise(message: Message)
@@ -24,28 +25,42 @@ sealed class ValidationScope<out T>(
 }
 
 @PublishedApi
-internal class RootScope<out T>(
-    val value: T,
-    shortCircuit: Boolean,
-) : ValidationScope<T>("", shortCircuit) {
+internal sealed class ParentScope<out T> : ValidationScope<T>() {
     val errors: List<ValidationError>
         field = mutableListOf<ValidationError>()
 
-    override fun addError(error: ValidationError) {
+    final override fun addError(error: ValidationError) {
         errors += error
     }
+}
+
+@PublishedApi
+internal class RootScope<out T>(
+    val value: T,
+    override val shortCircuit: Boolean,
+) : ParentScope<T>() {
+    override val path: String = ""
 
     override fun raise(message: Message) = raise(ValidationError.Root(message))
+}
+
+@PublishedApi
+internal sealed class ChildrenScope<out T> : ValidationScope<T>() {
+    abstract val parent: ValidationScope<*>
+
+    final override fun addError(error: ValidationError) {
+        parent.addError(error)
+    }
 }
 
 @PublishedApi
 internal class FieldScope<out T>(
     val value: T,
     name: String,
-    private val parent: ValidationScope<*>,
-    shortCircuit: Boolean = parent.shortCircuit,
-) : ValidationScope<T>(if (parent.path.isEmpty()) name else "${parent.path}.$name", shortCircuit) {
-    override fun addError(error: ValidationError) = parent.addError(error)
+    override val parent: ValidationScope<*>,
+    override val shortCircuit: Boolean = parent.shortCircuit,
+) : ChildrenScope<T>() {
+    override val path: String = if (parent.path.isEmpty()) name else "${parent.path}.$name"
 
     override fun raise(message: Message) = raise(ValidationError.Field(path, message))
 }
@@ -54,10 +69,10 @@ internal class FieldScope<out T>(
 internal class ItemScope<out T>(
     val value: T,
     private val index: Int,
-    private val parent: ValidationScope<*>,
-    shortCircuit: Boolean = parent.shortCircuit,
-) : ValidationScope<T>("${parent.path}[$index]", shortCircuit) {
-    override fun addError(error: ValidationError) = parent.addError(error)
+    override val parent: ValidationScope<*>,
+    override val shortCircuit: Boolean = parent.shortCircuit,
+) : ChildrenScope<T>() {
+    override val path = "${parent.path}[$index]"
 
     override fun raise(message: Message) = raise(ValidationError.Element(parent.path, index, message))
 }
@@ -66,10 +81,10 @@ internal class ItemScope<out T>(
 internal class EntryScope<out T>(
     val value: T,
     key: Any?,
-    private val parent: ValidationScope<*>,
-    shortCircuit: Boolean = parent.shortCircuit,
-) : ValidationScope<T>("${parent.path}[$key]", shortCircuit) {
-    override fun addError(error: ValidationError) = parent.addError(error)
+    override val parent: ValidationScope<*>,
+    override val shortCircuit: Boolean = parent.shortCircuit,
+) : ChildrenScope<T>() {
+    override val path: String = "${parent.path}[$key]"
 
     override fun raise(message: Message) = raise(ValidationError.Field(path, message))
 }
@@ -78,14 +93,9 @@ internal class EntryScope<out T>(
 internal class EphemeralScope<out T>(
     val value: T,
     parent: ValidationScope<*>,
-    shortCircuit: Boolean = parent.shortCircuit,
-) : ValidationScope<T>(parent.path, shortCircuit) {
-    val errors: List<ValidationError>
-        field = mutableListOf<ValidationError>()
-
-    override fun addError(error: ValidationError) {
-        errors += error
-    }
+    override val shortCircuit: Boolean = parent.shortCircuit,
+) : ParentScope<T>() {
+    override val path: String = parent.path
 
     override fun raise(message: Message) = raise(ValidationError.Root(message))
 }
