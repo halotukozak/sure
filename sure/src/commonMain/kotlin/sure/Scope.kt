@@ -28,11 +28,11 @@ internal class RootScope<out T>(
     val value: T,
     shortCircuit: Boolean,
 ) : ValidationScope<T>("", shortCircuit) {
-    private val _errors = mutableListOf<ValidationError>()
-    val errors: List<ValidationError> get() = _errors
+    val errors: List<ValidationError>
+        field = mutableListOf<ValidationError>()
 
     override fun addError(error: ValidationError) {
-        _errors += error
+        errors += error
     }
 
     override fun raise(message: Message) = raise(ValidationError.Root(message))
@@ -80,11 +80,11 @@ internal class EphemeralScope<out T>(
     parent: ValidationScope<*>,
     shortCircuit: Boolean = parent.shortCircuit,
 ) : ValidationScope<T>(parent.path, shortCircuit) {
-    private val _errors = mutableListOf<ValidationError>()
-    val errors: List<ValidationError> get() = _errors
+    val errors: List<ValidationError>
+        field = mutableListOf<ValidationError>()
 
     override fun addError(error: ValidationError) {
-        _errors += error
+        errors += error
     }
 
     override fun raise(message: Message) = raise(ValidationError.Root(message))
