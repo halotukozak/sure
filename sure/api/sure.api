@@ -58,31 +58,41 @@ public final class sure/ChecksKt {
 	public static synthetic fun validatedOptional$default (Lsure/ValidationScope;Lkotlin/reflect/KProperty0;Lsure/Validator;ZILjava/lang/Object;)V
 }
 
-public final class sure/EntryScope : sure/ValidationScope {
+public abstract class sure/ChildrenScope : sure/ValidationScope {
+	public abstract fun getParent ()Lsure/ValidationScope;
+}
+
+public final class sure/EntryScope : sure/ChildrenScope {
 	public fun <init> (Ljava/lang/Object;Ljava/lang/Object;Lsure/ValidationScope;Z)V
 	public synthetic fun <init> (Ljava/lang/Object;Ljava/lang/Object;Lsure/ValidationScope;ZILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun getParent ()Lsure/ValidationScope;
+	public synthetic fun getShortCircuit ()Z
 	public final fun getValue ()Ljava/lang/Object;
 	public fun raise (Lsure/Message;)V
 }
 
-public final class sure/EphemeralScope : sure/ValidationScope {
+public final class sure/EphemeralScope : sure/ParentScope {
 	public fun <init> (Ljava/lang/Object;Lsure/ValidationScope;Z)V
 	public synthetic fun <init> (Ljava/lang/Object;Lsure/ValidationScope;ZILkotlin/jvm/internal/DefaultConstructorMarker;)V
-	public final fun getErrors ()Ljava/util/List;
+	public synthetic fun getShortCircuit ()Z
 	public final fun getValue ()Ljava/lang/Object;
 	public fun raise (Lsure/Message;)V
 }
 
-public final class sure/FieldScope : sure/ValidationScope {
+public final class sure/FieldScope : sure/ChildrenScope {
 	public fun <init> (Ljava/lang/Object;Ljava/lang/String;Lsure/ValidationScope;Z)V
 	public synthetic fun <init> (Ljava/lang/Object;Ljava/lang/String;Lsure/ValidationScope;ZILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun getParent ()Lsure/ValidationScope;
+	public synthetic fun getShortCircuit ()Z
 	public final fun getValue ()Ljava/lang/Object;
 	public fun raise (Lsure/Message;)V
 }
 
-public final class sure/ItemScope : sure/ValidationScope {
+public final class sure/ItemScope : sure/ChildrenScope {
 	public fun <init> (Ljava/lang/Object;ILsure/ValidationScope;Z)V
 	public synthetic fun <init> (Ljava/lang/Object;ILsure/ValidationScope;ZILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun getParent ()Lsure/ValidationScope;
+	public synthetic fun getShortCircuit ()Z
 	public final fun getValue ()Ljava/lang/Object;
 	public fun raise (Lsure/Message;)V
 }
@@ -139,9 +149,13 @@ public final class sure/Message$Companion {
 	public final fun getUnique ()Lsure/Message;
 }
 
-public final class sure/RootScope : sure/ValidationScope {
-	public fun <init> (Ljava/lang/Object;Z)V
+public abstract class sure/ParentScope : sure/ValidationScope {
 	public final fun getErrors ()Ljava/util/List;
+}
+
+public final class sure/RootScope : sure/ParentScope {
+	public fun <init> (Ljava/lang/Object;Z)V
+	public synthetic fun getShortCircuit ()Z
 	public final fun getValue ()Ljava/lang/Object;
 	public fun raise (Lsure/Message;)V
 }
@@ -236,8 +250,7 @@ public final class sure/ValidationResult$Valid : sure/ValidationResult {
 }
 
 public abstract class sure/ValidationScope {
-	public synthetic fun <init> (Ljava/lang/String;ZLkotlin/jvm/internal/DefaultConstructorMarker;)V
-	public final fun getShortCircuit ()Z
+	public abstract fun getShortCircuit ()Z
 	public abstract fun raise (Lsure/Message;)V
 	protected final fun raise (Lsure/ValidationError;)V
 }

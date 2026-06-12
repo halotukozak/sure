@@ -17,23 +17,24 @@ open class Validator<T>(
     internal val shortCircuit: Boolean,
     internal val applyRules: ValidationScope<T>.() -> Unit,
 ) {
-    open fun validate(value: Any?): ValidationResult = when {
-        value == null -> {
-            ValidationResult.Invalid(ValidationError.Root(Message.NotNull))
-        }
+    open fun validate(value: Any?): ValidationResult =
+        when {
+            value == null -> {
+                ValidationResult.Invalid(ValidationError.Root(Message.NotNull))
+            }
 
-        !value.isInstanceOf(kClass) -> {
-            ValidationResult.Invalid(
-                ValidationError.Root(Message.TypeMismatched(kClass, value::class)),
-            )
-        }
+            !value.isInstanceOf(kClass) -> {
+                ValidationResult.Invalid(
+                    ValidationError.Root(Message.TypeMismatched(kClass, value::class)),
+                )
+            }
 
-        else -> {
-            val scope = RootScope(value, shortCircuit)
-            runScope { applyRules(scope) }
-            if (scope.errors.isEmpty()) ValidationResult.Valid else ValidationResult.Invalid(scope.errors)
+            else -> {
+                val scope = RootScope(value, shortCircuit)
+                runScope { applyRules(scope) }
+                if (scope.errors.isEmpty()) ValidationResult.Valid else ValidationResult.Invalid(scope.errors)
+            }
         }
-    }
 
     fun nullable(): Validator<T?> =
         object : Validator<T?>(kClass, shortCircuit, { if (value != null) applyRules(this) }) {
@@ -53,7 +54,7 @@ open class Validator<T>(
 
         inline operator fun <reified T : Any> invoke(
             shortCircuit: Boolean = true,
-            noinline rules: context(ValidationScope<T>)(T).() -> Unit,
+            noinline rules: context(ValidationScope<T>)T.() -> Unit,
         ): Validator<T> = Validator(T::class, shortCircuit) { rules(value) }
     }
 }
