@@ -43,6 +43,10 @@ class ValidationExtensionProcessorTest {
         )
         assertTrue(generated.contains("validatorsByClass"), "missing registry: $generated")
         assertTrue(generated.contains("inline fun <reified T : Any> validatorFor"), "missing validatorFor: $generated")
+        assertTrue(
+            generated.contains("inline fun <reified F : Any> validated(property: kotlin.reflect.KProperty0<F>)"),
+            "missing validated(property) overload: $generated",
+        )
     }
 
     @Test

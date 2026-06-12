@@ -15,6 +15,8 @@ import java.io.OutputStreamWriter
 private const val ANNOTATION_FQN = "sure.Validatable"
 private const val VALIDATOR_FQN = "sure.Validator"
 private const val VALIDATION_RESULT_FQN = "sure.ValidationResult"
+private const val VALIDATION_SCOPE_FQN = "sure.ValidationScope"
+private const val KPROPERTY0_FQN = "kotlin.reflect.KProperty0"
 private const val GENERATED_PACKAGE = "sure"
 private const val GENERATED_FILE = "GeneratedValidationExtensions"
 private const val VALIDATOR_FIELD = "validator"
@@ -121,6 +123,10 @@ private class ValidationExtensionProcessor(
             appendLine("inline fun <reified T : Any> validatorFor(): $VALIDATOR_FQN<T> =")
             appendLine("    validatorsByClass[T::class] as? $VALIDATOR_FQN<T>")
             appendLine($$"        ?: error(\"No validator registered for ${T::class.qualifiedName}\")")
+            appendLine()
+            appendLine("context(_: $VALIDATION_SCOPE_FQN<*>)")
+            appendLine("inline fun <reified F : Any> validated(property: $KPROPERTY0_FQN<F>): Unit =")
+            appendLine("    validated(property, validatorFor<F>())")
         }
 }
 
